@@ -1,0 +1,107 @@
+﻿@inject HttpClient _client
+@using Jarzi.School.Blazor.Shared.Model
+<EditForm Model="@Teacher" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label>Imię:</label>
+        <div>
+            <InputText @bind-Value="@Teacher.Firstname" />
+            <ValidationMessage For="@(() => Teacher!.Firstname)" />
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label>Nazwisko:</label>
+        <div>
+            <InputText @bind-Value="@Teacher.Lastname" />
+            <ValidationMessage For="@(() => Teacher!.Lastname)" />
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label>Etat:</label>
+        <div>
+            <InputNumber @bind-Value="@Teacher.Tenure" />
+            <ValidationMessage For="@(() => Teacher!.Tenure)" />
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label>Data rozpoczęcia pracy:</label>
+        <div>
+            <InputDate @bind-Value="@Teacher.StartDate" />
+            <ValidationMessage For="@(() => Teacher!.StartDate)" />
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label>Klasy:</label>
+        <div class="multiselect">
+            <div id="checkboxes">
+                @foreach (var item in Items)
+                {
+                    <div>
+                        <label for="@item.Value">
+                            @if (item.Value)
+                            {
+                                <input type="checkbox" id="@item.Value" checked="checked" @onchange="@((e) => CheckboxChanged(e, item.Key))" />
+                            }
+                            else
+                            {
+                                <input type="checkbox" id="@item.Value" @onchange="@((e) => CheckboxChanged(e, item.Key))" />
+                            }
+                            @SchoolClasses.FirstOrDefault(s => s.Id == item.Key)?.Name
+                        </label>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-2">
+        @ButtonText
+    </button>
+
+</EditForm>
+
+
+@code {
+
+    [Parameter] public Dictionary<int, bool> Items { get; set; } = new();
+    [Parameter] public Teacher? Teacher { get; set; }
+    [Parameter] public SchoolClass[]? SchoolClasses { get; set; } = Array.Empty<SchoolClass>();
+    [Parameter] public string ButtonText { get; set; } = "Zapisz";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        SchoolClasses = await _client.GetFromJsonAsync<SchoolClass[]>("api/schoolClass");
+        Items = new Dictionary<int, bool>();
+        if (SchoolClasses != null)
+        {
+            foreach (var schoolClass in SchoolClasses)
+            {
+                Items.Add(schoolClass.Id, false);
+            }
+        }
+    }
+
+    private void CheckboxChanged(ChangeEventArgs e, int key)
+    {
+        Items[key] = (bool)e.Value;
+        SetSchoolClass(Items);
+    }
+
+    private void SetSchoolClass(Dictionary<int, bool> items)
+    {
+        Teacher.SchoolClasses = new List<SchoolClass>();
+        foreach (var item in items)
+        {
+            if (item.Value)
+            {
+                var schoolClass = SchoolClasses.FirstOrDefault(s => s.Id == item.Key);
+                if (schoolClass != null) Teacher.SchoolClasses.Add(schoolClass);
+            }
+        }
+    }
+}

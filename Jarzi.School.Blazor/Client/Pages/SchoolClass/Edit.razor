@@ -1,0 +1,28 @@
+﻿@page "/schoolClass/edit/{schoolClassId:int}"
+@using Jarzi.School.Blazor.Shared.Model
+@inject HttpClient _http
+@inject NavigationManager _uriHelper
+@inject IJSRuntime _js
+
+<h3>Edycja</h3>
+
+<Form ButtonText="Update" SchoolClass="_schoolClass"
+      OnValidSubmit="@EditSchoolClass" />
+
+@code {
+    [Parameter] public int SchoolClassId { get; set; }
+    SchoolClass? _schoolClass = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _schoolClass = await _http.GetFromJsonAsync<SchoolClass>($"api/schoolClass/{SchoolClassId}");
+    }
+
+    async Task EditSchoolClass()
+    {
+        await _http.PutAsJsonAsync("api/schoolClass", _schoolClass);
+        await _js.InvokeVoidAsync("alert", $"Zmodyfikowane poprawnie!");
+        _uriHelper.NavigateTo("schoolClass");
+
+    }
+}

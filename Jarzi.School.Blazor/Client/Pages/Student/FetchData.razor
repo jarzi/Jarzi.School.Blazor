@@ -1,0 +1,69 @@
+﻿@page "/student"
+@using Jarzi.School.Blazor.Shared.Model
+@inject HttpClient _client
+@inject IJSRuntime _js
+
+<h3>Uczniowie</h3>
+
+<div class="form-group">
+    <a class="btn btn-success" href="student/create">
+        <i class="oi oi-plus"></i> Stwórz ucznia
+    </a>
+</div>
+<br>
+
+@if (Students == null)
+{
+    <text>Ładowanie...</text>
+}
+else if (Students.Length == 0)
+{
+    <text>Brak wyników.</text>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nazwa</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var student in Students)
+        {
+            <tr>
+                <td>@student.Id</td>
+                <td>@student.Firstname</td>
+                <td>@student.Lastname</td>
+                <td>@student.AverageLastYear</td>
+                <td>@student.BirthDate</td>
+                <td>@student.SchoolClass?.Name</td>
+                <td>
+                    <a class="btn btn-success" href="student/edit/@student.Id">Edytuj</a>
+                    <button class="btn btn-danger" @onclick="@(() => Delete(student.Id))">Usuń</button>
+                </td>
+            </tr>
+        }
+
+        </tbody>
+    </table>
+}
+@code {
+    Student[]? Students { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Students = await _client.GetFromJsonAsync<Student[]>("api/student");
+    }
+
+    async Task Delete(int studentId)
+    {
+        var student = (Students ?? Array.Empty<Student>()).First(x => x.Id == studentId);
+        if (await _js.InvokeAsync<bool>("confirm", $"Chcesz usunąć {student.Firstname} {student.Lastname} ({student.Id}) ?"))
+        {
+            await _client.DeleteAsync($"api/student/{studentId}");
+            await OnInitializedAsync();
+        }
+    }
+}

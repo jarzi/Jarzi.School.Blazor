@@ -1,0 +1,18 @@
+﻿@page "/student/create"
+@using Jarzi.School.Blazor.Shared.Model
+@inject HttpClient _http
+@inject NavigationManager _uriHelper
+
+<h3>Uczniowie</h3>
+
+<Form ButtonText="Stwórz ucznia" Student="@_student"
+      OnValidSubmit="@CreateStudent" />
+
+@code {
+    Student _student = new();
+    async Task CreateStudent()
+    {
+        await _http.PostAsJsonAsync("api/student", _student);
+        _uriHelper.NavigateTo("student");
+    }
+}

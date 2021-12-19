@@ -1,0 +1,89 @@
+﻿@inject HttpClient _client
+@using Jarzi.School.Blazor.Shared.Model
+<EditForm Model="@Student" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label>Imię:</label>
+        <div>
+            <InputText @bind-Value="@Student.Firstname" />
+            <ValidationMessage For="@(() => Student!.Firstname)" />
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label>Nazwisko:</label>
+        <div>
+            <InputText @bind-Value="@Student.Lastname" />
+            <ValidationMessage For="@(() => Student!.Lastname)" />
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label>Średnia z ostatniego roku:</label>
+        <div>
+            <InputNumber @bind-Value="@Student.AverageLastYear" />
+            <ValidationMessage For="@(() => Student!.AverageLastYear)" />
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label>Data urodzenia:</label>
+        <div>
+            <InputDate @bind-Value="@Student.BirthDate" />
+            <ValidationMessage For="@(() => Student!.BirthDate)" />
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label>Klasa:</label>
+        <div>
+            <InputSelect @bind-Value="@SelectedSchoolClassId">
+                @foreach (var schoolClass in SchoolClasses)
+                {
+                    <option value="@schoolClass.Id">@schoolClass.Name</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => Student.SchoolClass)" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-2">
+        @ButtonText
+    </button>
+
+</EditForm>
+
+
+@code {
+    int _selectedSchoolClassId;
+    int SelectedSchoolClassId
+    {
+        get => _selectedSchoolClassId;
+        set
+        {
+            _selectedSchoolClassId = value;
+            SetSchoolClass(_selectedSchoolClassId);
+        }
+    }
+
+
+    [Parameter] public Student? Student { get; set; }
+    [Parameter] public SchoolClass[]? SchoolClasses { get; set; } = Array.Empty<SchoolClass>();
+    [Parameter] public string ButtonText { get; set; } = "Zapisz";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        SchoolClasses = await _client.GetFromJsonAsync<SchoolClass[]>("api/schoolClass");
+
+        if (SchoolClasses is {Length: > 0 })
+        {
+            Student.SchoolClass = SchoolClasses.FirstOrDefault();
+        }
+    }
+
+    private void SetSchoolClass(int schoolClassId)
+    {
+        if (Student is {SchoolClass: { } }) Student.SchoolClass = SchoolClasses.FirstOrDefault(s => s.Id == schoolClassId);
+    }
+}

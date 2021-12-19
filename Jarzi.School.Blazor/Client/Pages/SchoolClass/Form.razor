@@ -1,0 +1,23 @@
+﻿@using Jarzi.School.Blazor.Shared.Model
+<EditForm Model="@SchoolClass" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label>Nazwa:</label>
+        <div>
+            <InputText @bind-Value="@SchoolClass.Name" />
+            <ValidationMessage For="@(() => SchoolClass.Name)" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-2">
+        @ButtonText
+    </button>
+
+</EditForm>
+
+
+@code {
+    [Parameter] public SchoolClass? SchoolClass { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Zapisz";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}

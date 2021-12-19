@@ -1,0 +1,18 @@
+﻿@page "/schoolClass/create"
+@using Jarzi.School.Blazor.Shared.Model
+@inject HttpClient _http
+@inject NavigationManager _uriHelper
+
+<h3>Klasy</h3>
+
+<Form ButtonText="Stwórz klasę" SchoolClass="@schoolClass"
+      OnValidSubmit="@CreateSchoolClass" />
+
+@code {
+    SchoolClass schoolClass = new();
+    async Task CreateSchoolClass()
+    {
+        await _http.PostAsJsonAsync("api/schoolClass", schoolClass);
+        _uriHelper.NavigateTo("schoolClass");
+    }
+}
