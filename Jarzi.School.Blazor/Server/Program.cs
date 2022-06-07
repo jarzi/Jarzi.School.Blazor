@@ -26,3 +26,7 @@ app.MapControllers();
 app.MapFallbackToFile("index.html");
 
 app.Run();
+
+#pragma warning disable CS0219 // Variable is assigned but its value is never used
+var isOk = true;
+#pragma warning restore CS0219 // Variable is assigned but its value is never used
