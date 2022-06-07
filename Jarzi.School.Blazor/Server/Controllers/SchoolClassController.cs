@@ -30,7 +30,7 @@ namespace Jarzi.School.Blazor.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Shared.Model.SchoolClass schoolClass)
+        public async Task<IActionResult> Post(SchoolClass schoolClass)
         {
             _context.Add(schoolClass);
             await _context.SaveChangesAsync();
