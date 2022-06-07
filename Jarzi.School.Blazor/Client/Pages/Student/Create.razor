@@ -8,7 +8,8 @@
 <Form ButtonText="Stwórz ucznia" Student="@_student"
       OnValidSubmit="@CreateStudent" />
 
-@code {
+@code 
+{
     Student _student = new();
     async Task CreateStudent()
     {
