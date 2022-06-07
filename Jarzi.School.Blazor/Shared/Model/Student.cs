@@ -12,7 +12,7 @@ namespace Jarzi.School.Blazor.Shared.Model
         public string Lastname { get; set; }
         [Required(ErrorMessage = "Uczeń musi mieć podaną datę urodzenia")]
         public DateTime BirthDate { get; set; }
-        [Required(ErrorMessage = "Uczeń musi mieć podaną średnią ocen")]
+        [Required(ErrorMessage = "Uczeń musi mieć podaną średnią ocen!")]
         public double AverageLastYear { get; set; }
     }
 }
