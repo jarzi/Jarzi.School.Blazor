@@ -96,13 +96,16 @@
     {
         if (Teacher != null)
         {
-           Teacher.SchoolClasses = new List<SchoolClass>();
+            Teacher.SchoolClasses = new List<SchoolClass>();
             foreach (var item in items)
             {
                 if (item.Value)
                 {
-                    var schoolClass = SchoolClasses.FirstOrDefault(s => s.Id == item.Key);
-                    if (schoolClass != null) Teacher.SchoolClasses.Add(schoolClass);
+                    if (SchoolClasses != null)
+                    {
+                        var schoolClass = SchoolClasses.FirstOrDefault(s => s.Id == item.Key);
+                        if (schoolClass != null) Teacher.SchoolClasses.Add(schoolClass);
+                    }
                 }
             } 
         }   
