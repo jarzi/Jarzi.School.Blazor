@@ -57,12 +57,16 @@ namespace Jarzi.School.Blazor.Server.Controllers
         [HttpPut]
         public async Task<IActionResult> Put(Shared.Model.Teacher teacher)
         {
-            foreach (var teacherSchoolClass in teacher.SchoolClasses)
+            if (teacher.SchoolClasses != null)
             {
-                _context.Entry(teacherSchoolClass).State = EntityState.Modified;
+                foreach (var teacherSchoolClass in teacher.SchoolClasses)
+                {
+                    _context.Entry(teacherSchoolClass).State = EntityState.Modified;
+                }
+                _context.Entry(teacher).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
             }
-            _context.Entry(teacher).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            
             return NoContent();
         }
 
