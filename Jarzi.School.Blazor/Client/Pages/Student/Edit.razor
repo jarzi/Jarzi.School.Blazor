@@ -9,7 +9,8 @@
 <Form ButtonText="Edytuj" Student="_student"
       OnValidSubmit="@EditStudent" />
 
-@code {
+@code
+{
     [Parameter] public int StudentId { get; set; }
     Student? _student = new();
 
