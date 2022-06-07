@@ -24,6 +24,5 @@
         await _http.PutAsJsonAsync("api/student", _student);
         await _js.InvokeVoidAsync("alert", $"Zmodyfikowane poprawnie!");
         _uriHelper.NavigateTo("student");
-
     }
 }
