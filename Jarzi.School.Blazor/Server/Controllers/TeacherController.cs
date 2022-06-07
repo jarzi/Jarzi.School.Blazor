@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Jarzi.School.Blazor.Server.Controllers
 {
+    /// <summary>
+    /// Controller
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class TeacherController : ControllerBase
