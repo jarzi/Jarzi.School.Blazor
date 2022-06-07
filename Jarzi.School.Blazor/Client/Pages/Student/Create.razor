@@ -5,10 +5,10 @@
 
 <h3>Uczniowie</h3>
 
-<Form ButtonText="Stwórz ucznia" Student="@_student"
-      OnValidSubmit="@CreateStudent" />
+<Form ButtonText="Stwórz ucznia" Student="@_student" OnValidSubmit="@CreateStudent" />
 
-@code {
+@code
+{
     Student _student = new();
     async Task CreateStudent()
     {
