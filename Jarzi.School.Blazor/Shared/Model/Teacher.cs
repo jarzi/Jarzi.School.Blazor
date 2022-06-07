@@ -12,7 +12,7 @@ namespace Jarzi.School.Blazor.Shared.Model
         public string Lastname { get; set; }
         [Required(ErrorMessage = "Nauczyciel musi mieć podany etat")]
         public double Tenure { get; set; }
-        [Required(ErrorMessage = "Nauczyciel musi mieć podaną datę rozpoczęcia pracy")]
+        [Required(ErrorMessage = "Nauczyciel musi mieć podaną datę rozpoczęcia pracy!")]
         public DateTime StartDate { get; set; }
     }
 }
