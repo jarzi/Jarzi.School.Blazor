@@ -30,3 +30,7 @@ app.Run();
 #pragma warning disable CS0219 // Variable is assigned but its value is never used
 var isOk = true;
 #pragma warning restore CS0219 // Variable is assigned but its value is never used
+
+#pragma warning disable CS0219 // Variable is assigned but its value is never used
+var yeahIsOk = true;
+#pragma warning restore CS0219 // Variable is assigned but its value is never used
