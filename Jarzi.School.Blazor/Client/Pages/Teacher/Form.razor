@@ -94,14 +94,17 @@
 
     private void SetSchoolClass(Dictionary<int, bool> items)
     {
-        Teacher.SchoolClasses = new List<SchoolClass>();
-        foreach (var item in items)
+        if (Teacher != null)
         {
-            if (item.Value)
+           Teacher.SchoolClasses = new List<SchoolClass>();
+            foreach (var item in items)
             {
-                var schoolClass = SchoolClasses.FirstOrDefault(s => s.Id == item.Key);
-                if (schoolClass != null) Teacher.SchoolClasses.Add(schoolClass);
-            }
-        }
+                if (item.Value)
+                {
+                    var schoolClass = SchoolClasses.FirstOrDefault(s => s.Id == item.Key);
+                    if (schoolClass != null) Teacher.SchoolClasses.Add(schoolClass);
+                }
+            } 
+        }   
     }
 }
